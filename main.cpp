@@ -3,19 +3,11 @@
 #include <cstdint>
 
 #include "dht22.h"
-
-namespace climbatize {
-
-float CelciusToFarenheit(float fCelcius)
-{
-  return (fCelcius * 1.8f) + 32.0f;
-}
-
-}
+#include "utils.h"
 
 int main(int argc, char **argv)
 {
-  std::cout<<"Climbatize temperature/humidity test"<<std::endl;
+  std::cout<<"Climbatize"<<std::endl;
 
   // Initialise wiringPi
   if (wiringPiSetup() < 0) {
@@ -33,7 +25,7 @@ int main(int argc, char **argv)
       std::cout.precision(1);
       std::cout<<"Climbatize Humidity = "<<fHumidity<<" %% Temperature = "<<fCelcius<<" *C ("<<fFarenheit<<" *F)"<<std::endl;
     } else {
-      std::cerr<<"Climbatize Data not good, skip"<<std::endl;
+      std::cerr<<"Climbatize Data not good, dropping it"<<std::endl;
     }
 
     // Wait 2 seconds between each read
