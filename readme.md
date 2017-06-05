@@ -9,7 +9,7 @@ make
 
 Run:
 ```bash
-sudo ./climatize
+sudo ./climbatize
 ```
 
 OR
@@ -18,9 +18,9 @@ OR
 ```bash
 sudo crontab -e
 ```
-2) Add climatize:
+2) Add climbatize:
 ```bash
-*/5 * * * * /home/myuser/backup.sh
+*/5 * * * * /home/myuser/climbatize/climbatize
 ```
 3) Check it was added:
 ```bash
