@@ -5,6 +5,7 @@
 namespace climbatize {
 
 class cDHT22 {
+public:
   bool Read(float& fHumidity, float& fCelcius);
 
 private:

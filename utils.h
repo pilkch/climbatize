@@ -1,10 +1,17 @@
 #pragma once
 
+#include <string>
+
 namespace climbatize {
 
-inline float CelciusToFarenheit(float fCelcius)
-{
-  return (fCelcius * 1.8f) + 32.0f;
-}
+class cCSV;
+
+std::string GetDateTimeUTC();
+
+bool TestFileExists(const std::string& sFilePath);
+
+float CelciusToFarenheit(float fCelcius);
+
+void LogHumidityAndTemperature(cCSV& csv, float fHumidity, float fTemperatureCelcius);
 
 }
