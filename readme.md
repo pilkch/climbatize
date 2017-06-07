@@ -7,12 +7,18 @@ Build:
 make
 ```
 
-Run:
+Install it:
 ```bash
-sudo ./climbatize
+sudo make install
 ```
 
-OR
+Test it:
+```bash
+sudo su
+climbatize
+```
+
+Add it to crontab running every 15 minutes:
 
 1) 
 ```bash
@@ -20,7 +26,7 @@ sudo crontab -e
 ```
 2) Add climbatize:
 ```bash
-*/5 * * * * /home/myuser/climbatize/climbatize
+*/15 * * * * /usr/local/bin/climbatize
 ```
 3) Check it was added:
 ```bash
@@ -31,4 +37,9 @@ Uninstall:
 Remove crontab file:
 ```bash
 crontab -r
+```
+
+Remove binary and configuration file:
+```bash
+sudo make uninstall
 ```

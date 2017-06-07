@@ -1,6 +1,6 @@
 {
   "settings": {
-    "csv_file": "/home/myuser/climbatize/temperatures.csv"
+    "csv_file": "/root/.config/climbatize/temperatures.csv"
   }
 }
 
