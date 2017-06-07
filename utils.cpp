@@ -1,9 +1,12 @@
 #include <limits>
 #include <iostream>
 
-#include <sys/time.h>
-#include <syslog.h>
+#include <pwd.h>
 #include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <syslog.h>
+#include <unistd.h>
 
 #include "csv.h"
 #include "utils.h"
@@ -38,11 +41,39 @@ std::string GetDateTimeUTC()
   return buf2;
 }
 
+std::string GetHomeFolder()
+{
+  const char* szHomeFolder = getenv("HOME");
+  if (szHomeFolder != nullptr) return szHomeFolder;
+
+  struct passwd* pPasswd = getpwuid(getuid());
+  if (pPasswd != nullptr) return pPasswd->pw_dir;
+
+  return "";
+}
+
+std::string GetConfigFolder(const std::string& sApplicationNameLower)
+{
+  const std::string sHomeFolder = GetHomeFolder();
+  if (sHomeFolder.empty()) return "";
+
+  return sHomeFolder + "/.config/" + sApplicationNameLower;
+}
+
 bool TestFileExists(const std::string& sFilePath)
 {
   struct stat s;
   return (stat(sFilePath.c_str(), &s) >= 0);
 }
+
+size_t GetFileSizeBytes(const std::string& sFilePath)
+{
+  struct stat s;
+  if (stat(sFilePath.c_str(), &s) < 0) return 0;
+
+  return s.st_size;
+}
+
 
 float CelciusToFarenheit(float fCelcius)
 {

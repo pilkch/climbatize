@@ -16,11 +16,13 @@
 
 bool ReadFileIntoString(const std::string& sFilePath, size_t nMaxFileSizeBytes, std::string& contents)
 {
-  std::ifstream f(sFilePath);
+  if (!climbatize::TestFileExists(sFilePath)) {
+    std::cerr<<"Climbatize Config file \""<<sFilePath<<"\" not found"<<std::endl;
+    syslog(LOG_ERR, "Climbatize Config file \"%s\" not found", sFilePath.c_str());
+    return false;
+  }
 
-  // Get the size of the file
-  f.seekg(0, std::ios::end);
-  const size_t nFileSizeBytes = f.tellg();
+  const size_t nFileSizeBytes = climbatize::GetFileSizeBytes(sFilePath);
   if (nFileSizeBytes == 0) {
     std::cerr<<"Climbatize Empty config file \""<<sFilePath<<"\""<<std::endl;
     syslog(LOG_ERR, "Climbatize Empty config file \"%s\"", sFilePath.c_str());
@@ -31,7 +33,7 @@ bool ReadFileIntoString(const std::string& sFilePath, size_t nMaxFileSizeBytes, 
     return false;
   }
 
-  f.seekg(0, std::ios::beg);
+  std::ifstream f(sFilePath);
 
   contents.reserve(nFileSizeBytes);
 
@@ -90,17 +92,26 @@ int main(int argc, char **argv)
   openlog(nullptr, LOG_PID | LOG_CONS, LOG_USER | LOG_LOCAL0);
   std::cout<<"Climbatize"<<std::endl;
 
+  const std::string sConfigFolder = climbatize::GetConfigFolder("climbatize");
+  if (sConfigFolder.empty()) {
+    std::cerr<<"Climbatize Failed to get config folder for climbatize, exiting"<<std::endl;
+    syslog(LOG_ERR, "Climbatize Failed to get config folder for climbatize, exiting");
+    return EXIT_FAILURE;
+  }
+
   // Read the configuration
+  const std::string sSettingsFile = sConfigFolder + "/climbatize.json";
   cSettings settings;
-  // TODO: Get the home directory, place this JSON file in the root folder
-  if (!ReadJSONConfig("/home/elsa/climbatize/climbatize.json", settings)) {
-    std::cerr<<"Climbatize Failed to load JSON configuration, exiting"<<std::endl;
+  if (!ReadJSONConfig(sSettingsFile, settings)) {
+    std::cerr<<"Climbatize Failed to load JSON configuration from \""<<sSettingsFile<<"\", exiting"<<std::endl;
+    syslog(LOG_ERR, "Climbatize Failed to load JSON configuration from \"%s\", exiting", sSettingsFile.c_str());
     return EXIT_FAILURE;
   }
 
   // Initialise wiringPi
   if (wiringPiSetup() < 0) {
     std::cerr<<"Climbatize Failed to load wiringPi library, exiting"<<std::endl;
+    syslog(LOG_ERR, "Climbatize Failed to load wiringPi library, exiting");
     return EXIT_FAILURE;
   }
 
@@ -108,7 +119,8 @@ int main(int argc, char **argv)
 
   climbatize::cCSV csv;
   if (!csv.OpenAppend(settings.sCSVFilePath, "timestamp", "humidity", "temperature")) {
-    std::cerr<<"Climbatize Failed to open CSV file \""<<settings.sCSVFilePath<<"\""<<std::endl;
+    std::cerr<<"Climbatize Failed to open CSV file \""<<settings.sCSVFilePath<<"\", exiting"<<std::endl;
+    syslog(LOG_ERR, "Climbatize Failed to open CSV file \"%s\", exiting", settings.sCSVFilePath.c_str());
     return EXIT_FAILURE;
   }
 
