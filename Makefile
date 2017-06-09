@@ -2,10 +2,10 @@
 DEBUG	= -O3
 CC	= g++
 INCLUDE	= -I/usr/local/include
-CFLAGS	= $(DEBUG) -std=c++11 -Wall $(INCLUDE) -Winline -pipe
+CFLAGS	= $(DEBUG) -std=c++11 -std=c++1y -Wall $(INCLUDE) -Winline -pipe
 
 LDFLAGS	= -L/usr/local/lib
-LDLIBS    = -lwiringPi -lwiringPiDev -lpthread -lm -ljson-c
+LDLIBS    = -lstdc++fs -lwiringPi -lwiringPiDev -lpthread -lm -ljson-c
 
 SRC=dht.cpp main.cpp utils.cpp
 

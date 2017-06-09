@@ -1,6 +1,8 @@
 #include <limits>
 #include <iostream>
 
+#include <experimental/filesystem>
+
 #include <pwd.h>
 #include <sys/stat.h>
 #include <sys/time.h>
@@ -74,6 +76,31 @@ size_t GetFileSizeBytes(const std::string& sFilePath)
   return s.st_size;
 }
 
+bool MoveFile(const std::string& sFilePathFrom, const std::string& sFilePathTo)
+{
+  const std::experimental::filesystem::path from(sFilePathFrom);
+  const std::experimental::filesystem::path to(sFilePathTo);
+  std::experimental::filesystem::rename(from, to);
+  return TestFileExists(sFilePathTo);
+}
+
+void RotateLogs(const std::string& sFilePath)
+{
+  // Rotate the logs, starting with the last position and moving up to the second log
+  for (size_t i = 9; i > 1; i--) {
+    const std::string sFrom = sFilePath + "." + std::to_string(i - 1);
+    if (TestFileExists(sFrom)) {
+      const std::string sTo = sFilePath + "." + std::to_string(i);
+      MoveFile(sFrom, sTo);
+    }
+  }
+
+  // Now rotate the main log into the second rotation position
+  if (TestFileExists(sFilePath)) {
+    const std::string sTo = sFilePath + ".1";
+    MoveFile(sFilePath, sTo);
+  }
+}
 
 float CelciusToFarenheit(float fCelcius)
 {

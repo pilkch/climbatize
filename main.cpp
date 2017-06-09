@@ -117,6 +117,14 @@ int main(int argc, char **argv)
 
   climbatize::cDHT22 dht;
 
+  // Check if we need to rotate the logs
+  const size_t nMaxBytes = 1 * 1024 * 1024; // 1 MB max per CSV file
+  if (climbatize::GetFileSizeBytes(settings.sCSVFilePath) > nMaxBytes) {
+    std::cout<<"Climbatize Rotating CSV file \""<<settings.sCSVFilePath<<"\", exiting"<<std::endl;
+    syslog(LOG_INFO, "Climbatize Rotating CSV file \"%s\", exiting", settings.sCSVFilePath.c_str());
+    climbatize::RotateLogs(settings.sCSVFilePath);
+  }
+
   climbatize::cCSV csv;
   if (!csv.OpenAppend(settings.sCSVFilePath, "timestamp", "humidity", "temperature")) {
     std::cerr<<"Climbatize Failed to open CSV file \""<<settings.sCSVFilePath<<"\", exiting"<<std::endl;
