@@ -14,6 +14,8 @@
 #include "dht22.h"
 #include "utils.h"
 
+namespace climbatize {
+
 bool ReadFileIntoString(const std::string& sFilePath, size_t nMaxFileSizeBytes, std::string& contents)
 {
   if (!climbatize::TestFileExists(sFilePath)) {
@@ -87,6 +89,8 @@ bool ReadJSONConfig(const std::string& sFilePath, cSettings& settings)
   return JSONParse(*jobj, settings);
 }
 
+}
+
 int main(int argc, char **argv)
 {
   openlog(nullptr, LOG_PID | LOG_CONS, LOG_USER | LOG_LOCAL0);
@@ -101,8 +105,8 @@ int main(int argc, char **argv)
 
   // Read the configuration
   const std::string sSettingsFile = sConfigFolder + "/climbatize.json";
-  cSettings settings;
-  if (!ReadJSONConfig(sSettingsFile, settings)) {
+  climbatize::cSettings settings;
+  if (!climbatize::ReadJSONConfig(sSettingsFile, settings)) {
     std::cerr<<"Climbatize Failed to load JSON configuration from \""<<sSettingsFile<<"\", exiting"<<std::endl;
     syslog(LOG_ERR, "Climbatize Failed to load JSON configuration from \"%s\", exiting", sSettingsFile.c_str());
     return EXIT_FAILURE;
