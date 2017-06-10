@@ -16,6 +16,9 @@
 
 namespace climbatize {
 
+const std::string sVersion = "0.9";
+const std::string sVersionDateTime = "2017/06/10 10:10PM";
+
 bool ReadFileIntoString(const std::string& sFilePath, size_t nMaxFileSizeBytes, std::string& contents)
 {
   if (!climbatize::TestFileExists(sFilePath)) {
@@ -89,12 +92,43 @@ bool ReadJSONConfig(const std::string& sFilePath, cSettings& settings)
   return JSONParse(*jobj, settings);
 }
 
+void PrintVersion()
+{
+  std::cout<<"Climbatize v"<<sVersion<<", "<<sVersionDateTime<<std::endl;
+}
+
+void PrintUsage()
+{
+  std::cout<<"Usage:"<<std::endl;
+  std::cout<<"climbatize [-v|--v|--version] [-h|--h|--help]"<<std::endl;
+  std::cout<<"-v|--v|--version:\tPrint the version information"<<std::endl;
+  std::cout<<"-h|--h|--help:\tPrint this usage information"<<std::endl;
+}
+
 }
 
 int main(int argc, char **argv)
 {
   openlog(nullptr, LOG_PID | LOG_CONS, LOG_USER | LOG_LOCAL0);
   std::cout<<"Climbatize"<<std::endl;
+
+  if (argc >= 2) {
+    for (size_t i = 1; i < size_t(argc); i++) {
+      if (argv[i] != nullptr) {
+        const std::string sAction = argv[i];
+        if ((sAction == "-v") || (sAction == "-version") || (sAction == "--version")) climbatize::PrintVersion();
+        else if ((sAction == "-h") || (sAction == "-help") || (sAction == "--help")) climbatize::PrintUsage();
+        else {
+          std::cerr<<"Unknown command line parameter \""<<sAction<<"\", exiting"<<std::endl;
+          syslog(LOG_ERR, "Unknown command line parameter \"%s\", exiting", sAction.c_str());
+          climbatize::PrintUsage();
+          return -1;
+        }
+      }
+    }
+
+    return 0;
+  }
 
   const std::string sConfigFolder = climbatize::GetConfigFolder("climbatize");
   if (sConfigFolder.empty()) {
