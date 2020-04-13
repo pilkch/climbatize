@@ -14,14 +14,12 @@ Install it:
 sudo make install
 ```
 
-Test it:
+Run it:
 ```bash
-sudo su
-climbatize
+sudo climbatize
 ```
 
-Add it to crontab running every 15 minutes:
-
+Create a cron job to run it every 15 minutes:
 1) 
 ```bash
 sudo crontab -e
