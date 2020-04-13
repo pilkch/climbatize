@@ -179,7 +179,7 @@ int main(int argc, char **argv)
       climbatize::LogHumidityAndTemperature(csv, fHumidity, fTemperatureCelcius);
       break;
     } else {
-      std::cerr<<"Climbatize Data not good, dropping it"<<std::endl;
+      std::cerr<<"Climbatize Data not good (Raw: "<<fHumidity<<", "<<fTemperatureCelcius<<"), dropping it"<<std::endl;
       syslog(LOG_ERR, "Climbatize Data not good, dropping it");
     }
 

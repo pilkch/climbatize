@@ -4,8 +4,8 @@
 
 // From http://www.piprojects.xyz/temperature-humidity-sensor-orange-pi/
 
-#define MAX_TIMINGS 85
-#define DHT_PIN 7
+#define MAX_TIMINGS 850
+#define DHT_PIN 2 // NOTE: This is physical pin 7, wiringpi pin 2
 
 namespace climbatize {
 
@@ -50,7 +50,7 @@ bool cDHT22::Read(float& fHumidity, float& fCelcius)
 
     if (counter == 255) break;
 
-    // Ignore first 3 transitions
+    // Ignore first 4 transitions and every second read
     if ((i >= 4) && (i % 2 == 0)) {
       // Shove each bit into the storage bytes
       data[j / 8] <<= 1;
