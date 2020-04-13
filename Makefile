@@ -5,7 +5,7 @@ INCLUDE	= -I/usr/local/include
 CFLAGS	= $(DEBUG) -std=c++11 -std=c++1y -Wall $(INCLUDE) -Winline -pipe
 
 LDFLAGS	= -L/usr/local/lib
-LDLIBS    = -lstdc++fs -lwiringPi -lwiringPiDev -lpthread -lm -ljson-c
+LDLIBS  = -ljson-c -lwiringPi -lstdc++fs -lpthread -lm
 
 SRC=dht.cpp main.cpp utils.cpp
 
