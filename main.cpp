@@ -175,6 +175,7 @@ int main(int argc, char **argv)
     float fHumidity = 0.0f;
     float fTemperatureCelcius = 0.0f;
     if (dht.Read(fHumidity, fTemperatureCelcius)) {
+      std::cout<<"Climbatize Temperature read "<<fHumidity<<", "<<fTemperatureCelcius<<" C"<<std::endl;
       climbatize::LogHumidityAndTemperature(csv, fHumidity, fTemperatureCelcius);
       break;
     } else {
