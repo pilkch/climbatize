@@ -1,8 +1,36 @@
-About:  
+## About
+
 This project is a monitoring application for the DHT22 temperature monitor for an Orange Pi (And maybe Raspberry Pi etc.) based on code from http://www.piprojects.xyz/temperature-humidity-sensor-orange-pi/  
 Basically it is run by crontab at regular intervals (Say, every 15 minutes), opens the DHT22 device, tries to take a reading and outputs the time, humidity and temperature to a CSV file.
 
+## Board information
+
 [Board information](doc/board.md)
+
+## Requirements
+
+- [wiringOP](https://github.com/zhaolei/WiringOP)
+- libjson-c
+
+## Building
+
+Build and install wiringOP:
+```bash
+git clone git@github.com:zhaolei/WiringOP.git
+cd wiringOP/
+./build clean
+./build
+```
+
+Install libjson-c:
+```bash
+sudo apt-get install libjson-c libjson-c-dev
+```
+
+Double check the wiring diagram for your board and which pins wiringOP uses (We use wiringOP pin 2 which is physical pin 7 on the an OrangePI One board):
+```bash
+sudo gpio readall
+```
 
 Build:
 ```bash
@@ -19,6 +47,8 @@ Run it:
 sudo climbatize
 ```
 
+## Cron
+
 Create a cron job to run it every 15 minutes:
 1) 
 ```bash
@@ -33,7 +63,8 @@ sudo crontab -e
 crontab -l
 ```
 
-Uninstall:  
+## Removal
+
 Remove crontab file:
 ```bash
 crontab -r
