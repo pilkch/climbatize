@@ -26,7 +26,7 @@ Install libjson-c
 
 Ubuntu:
 ```bash
-sudo apt-get install libjson-c libjson-c-dev
+sudo apt install libjson-c libjson-c-dev
 ```
 
 Fedora:
@@ -49,7 +49,18 @@ Install it:
 sudo make install
 ```
 
-Run it:
+Create the output directory (You can change this, but you'll need to use a JSON config file and specify where it goes):
+```bash
+sudo mkdir -p /root/.config/climbatize/
+sudo cp ./climbatize.json /root/.config/climbatize/climbatize.json
+```
+
+Edit the output CSV file path and WiringPi pin to read from:
+```bash
+sudo vi /root/.config/climbatize/climbatize.json
+```
+
+Test it can run and temperatures are read correctly:
 ```bash
 sudo climbatize
 ```

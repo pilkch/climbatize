@@ -49,28 +49,43 @@ bool ReadFileIntoString(const std::string& sFilePath, size_t nMaxFileSizeBytes, 
 
 class cSettings {
 public:
-  void Clear() { sCSVFilePath.clear(); }
+  cSettings() :
+    wiringPiPin(-1)
+  {
+  }  
 
+  void Clear()
+  {
+    wiringPiPin = -1;
+    sCSVFilePath.clear();
+  }
+
+  int wiringPiPin;
   std::string sCSVFilePath;
 };
 
 bool JSONParse(json_object& jobj, cSettings& settings)
 {
+  settings.Clear();
+
   json_object_object_foreach(&jobj, key, val) {
     enum json_type type = json_object_get_type(val);
     if ((type == json_type_object) && (strcmp(key, "settings") == 0)) {
       json_object_object_foreach(val, child_key, child_val) {
         enum json_type type = json_object_get_type(child_val);
-        if ((type == json_type_string) && (strcmp(child_key, "csv_file") == 0)) {
+        if ((type == json_type_int) && (strcmp(child_key, "wiring_pi_pin") == 0)) {
+          settings.wiringPiPin = json_object_get_int(child_val);
+          std::cout<<"Found settings, wiring_pi_pin, value: \""<<settings.sCSVFilePath<<"\""<<std::endl;
+        } else if ((type == json_type_string) && (strcmp(child_key, "csv_file") == 0)) {
           settings.sCSVFilePath = json_object_get_string(child_val);
           std::cout<<"Found settings, csv_file, value: \""<<settings.sCSVFilePath<<"\""<<std::endl;
-          return true;
         }
       }
     }
   }
 
-  return false;
+  // Return true if we have valid values now
+  return (settings.wiringPiPin >= 0) && !settings.sCSVFilePath.empty();
 }
 
 bool ReadJSONConfig(const std::string& sFilePath, cSettings& settings)
@@ -104,12 +119,16 @@ void PrintUsage()
   std::cout<<"-v|--v|--version:\tPrint the version information"<<std::endl;
   std::cout<<"-h|--h|--help:\tPrint this usage information"<<std::endl;
   std::cout<<std::endl;
-  std::cout<<"Example climbatize.json configuration file:"<<std::endl;
+  std::cout<<"Example climbatize.json configuration file"<<std::endl;
   std::cout<<"{"<<std::endl;
   std::cout<<"  \"settings\": {"<<std::endl;
+  std::cout<<"    \"wiring_pi_pin\": 2,"<<std::endl;
   std::cout<<"    \"csv_file\": \"/root/.config/climbatize/temperatures.csv\""<<std::endl;
   std::cout<<"  }"<<std::endl;
   std::cout<<"}"<<std::endl;
+  std::cout<<std::endl;
+  std::cout<<"NOTE: WiringPi pin 2 is physical pin 7 on an Orange Pi, but this is just an example, you probably have a different board and plugged the temperature sensor into a different pin"<<std::endl;
+  std::cout<<"NOTE: The output CSV file path can be anywhere, but whichever user will be running climbatize needs to be able to write to the location"<<std::endl;
 }
 
 }
@@ -161,7 +180,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  climbatize::cDHT22 dht;
+  climbatize::cDHT22 dht(settings.wiringPiPin);
 
   // Check if we need to rotate the logs
   const size_t nMaxBytes = 1 * 1024 * 1024; // 1 MB max per CSV file

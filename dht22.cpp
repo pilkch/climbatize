@@ -5,9 +5,13 @@
 // From http://www.piprojects.xyz/temperature-humidity-sensor-orange-pi/
 
 #define MAX_TIMINGS 850
-#define DHT_PIN 2 // NOTE: This is physical pin 7, wiringpi pin 2
 
 namespace climbatize {
+
+cDHT22::cDHT22(int _wiringPiPin) :
+  wiringPiPin(_wiringPiPin)
+{
+}
 
 bool cDHT22::ValidateChecksum(const std::array<int, 5>& data) const
 {
@@ -26,12 +30,12 @@ bool cDHT22::Read(float& fHumidity, float& fCelcius)
   std::array<int, 5> data = { 0, 0, 0, 0, 0 };
 
   // Pull pin down for 18 milliseconds
-  pinMode(DHT_PIN, OUTPUT);
-  digitalWrite(DHT_PIN, LOW);
+  pinMode(wiringPiPin, OUTPUT);
+  digitalWrite(wiringPiPin, LOW);
   delay(18);
 
   // Prepare to read the pin
-  pinMode(DHT_PIN, INPUT);
+  pinMode(wiringPiPin, INPUT);
 
   uint8_t laststate = HIGH;
   uint8_t counter = 0;
@@ -40,13 +44,13 @@ bool cDHT22::Read(float& fHumidity, float& fCelcius)
   // Detect change and read data
   for (uint8_t i = 0; i < MAX_TIMINGS; i++) {
     counter = 0;
-    while (digitalRead(DHT_PIN) == laststate) {
+    while (digitalRead(wiringPiPin) == laststate) {
       counter++;
       delayMicroseconds(1);
 
       if (counter == 255) break;
     }
-    laststate = digitalRead(DHT_PIN);
+    laststate = digitalRead(wiringPiPin);
 
     if (counter == 255) break;
 
