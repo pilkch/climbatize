@@ -43,7 +43,7 @@ uninstall:
 
 clean:
 	@echo "[Clean]"
-	@rm -f $(OBJ) *~ core tags $(BINS)
+	@rm -f *.o *~ core tags $(BINS)
 
 depend:
 	makedepend -Y $(SRC)

@@ -1,5 +1,6 @@
 {
   "settings": {
+    "wiring_pi_pin": 2,
     "csv_file": "/root/.config/climbatize/temperatures.csv"
   }
 }
