@@ -16,15 +16,22 @@ Basically it is run by crontab at regular intervals (Say, every 15 minutes), ope
 
 Build and install wiringOP:
 ```bash
-git clone git@github.com:zhaolei/WiringOP.git
-cd wiringOP/
+git clone https://github.com/zhaolei/WiringOP
+cd WiringOP/
 ./build clean
 ./build
 ```
 
-Install libjson-c:
+Install libjson-c
+
+Ubuntu:
 ```bash
 sudo apt-get install libjson-c libjson-c-dev
+```
+
+Fedora:
+```bash
+sudo dnf install json-c json-c-devel
 ```
 
 Double check the wiring diagram for your board and which pins wiringOP uses (We use wiringOP pin 2 which is physical pin 7 on the an OrangePI One board):
