@@ -202,6 +202,7 @@ int main(int argc, char **argv)
     float fHumidity = 0.0f;
     float fTemperatureCelcius = 0.0f;
     if (dht.Read(fHumidity, fTemperatureCelcius)) {
+      // As soon as we get a valid read log it and get out
       std::cout<<"Climbatize Temperature read "<<fHumidity<<", "<<fTemperatureCelcius<<" C"<<std::endl;
       climbatize::LogHumidityAndTemperature(csv, fHumidity, fTemperatureCelcius);
       break;
@@ -210,8 +211,8 @@ int main(int argc, char **argv)
       syslog(LOG_ERR, "Climbatize Data not good, dropping it");
     }
 
-    // Wait 2 seconds between each read
-    delay( 2000 );
+    // Wait 2 seconds between each attempted read
+    delay(2000);
   }
 
   std::cout<<"Climbatize Finished, exiting"<<std::endl;
