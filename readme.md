@@ -34,7 +34,7 @@ Fedora:
 sudo dnf install json-c json-c-devel
 ```
 
-Double check the wiring diagram for your board and which pins wiringOP uses (We use wiringOP pin 2 which is physical pin 7 on the an OrangePI One board):
+Double check the wiring diagram for your board and which pins wiringOP uses (The example climbatize.json files uses wiringOP pin 2 which is physical pin 7 on an OrangePI One board):
 ```bash
 sudo gpio readall
 ```
