@@ -136,7 +136,6 @@ void PrintUsage()
 int main(int argc, char **argv)
 {
   openlog(nullptr, LOG_PID | LOG_CONS, LOG_USER | LOG_LOCAL0);
-  std::cout<<"Climbatize"<<std::endl;
 
   if (argc >= 2) {
     for (size_t i = 1; i < size_t(argc); i++) {
