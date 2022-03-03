@@ -103,6 +103,13 @@ void PrintUsage()
   std::cout<<"climbatize [-v|--v|--version] [-h|--h|--help]"<<std::endl;
   std::cout<<"-v|--v|--version:\tPrint the version information"<<std::endl;
   std::cout<<"-h|--h|--help:\tPrint this usage information"<<std::endl;
+  std::cout<<std::endl;
+  std::cout<<"Example climbatize.json configuration file:"<<std::endl;
+  std::cout<<"{"<<std::endl;
+  std::cout<<"  \"settings\": {"<<std::endl;
+  std::cout<<"    \"csv_file\": \"/root/.config/climbatize/temperatures.csv\""<<std::endl;
+  std::cout<<"  }"<<std::endl;
+  std::cout<<"}"<<std::endl;
 }
 
 }
@@ -138,6 +145,7 @@ int main(int argc, char **argv)
   }
 
   // Read the configuration
+  // Something like /root/.config/climbatize/climbatize.json
   const std::string sSettingsFile = sConfigFolder + "/climbatize.json";
   climbatize::cSettings settings;
   if (!climbatize::ReadJSONConfig(sSettingsFile, settings)) {
@@ -192,4 +200,3 @@ int main(int argc, char **argv)
 
   return EXIT_SUCCESS;
 }
-
