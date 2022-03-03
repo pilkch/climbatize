@@ -16,8 +16,8 @@
 
 namespace climbatize {
 
-const std::string sVersion = "0.9";
-const std::string sVersionDateTime = "2017/06/10 10:10PM";
+const std::string sVersion = "1.0";
+const std::string sVersionDateTime = "2022/03/03 11:16PM";
 
 bool ReadFileIntoString(const std::string& sFilePath, size_t nMaxFileSizeBytes, std::string& contents)
 {
